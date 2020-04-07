@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Guess Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Oswald&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <header>
+        <h1>Guess the country </h1>
+    </header>
+
+    <section>
+        <div class="gameArea">
+            <h3 class="msg"></h3>
+            <input type="text" class="hidden" placeholder="Type here..">
+            <button class="btn">Click to start</button>
+        </div>
+    </section>
+
+    <script>
+        const msg = document.querySelector('.msg');
+        const guess = document.querySelector('input');
+        const btn = document.querySelector('.btn');
+        let play = false;
+        let newWords = "";
+        let ranWords = "";
+        let sWords = ['pakistan', 'finland', 'sweden', 'norway', 'denmark', 'italy',
+            'maldives', 'thailand', 'france', 'germany', 'america', 'spain', 'nepal', 'bangladesh', 'india'];
+
+        const createNewWords = () => {
+            let ranNum = Math.floor(Math.random() * sWords.length);
+            let newTempSwords = sWords[ranNum];
+            console.log(newTempSwords.split(""));
+            return newTempSwords;
+        }
+
+        const scrambleWords = (arr) => {
+            for (let i = arr.length - 1; i > 0; i--) {
+                let temp = arr[i];
+                let j = Math.floor(Math.random() * (i + 1));
+
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+            return arr;
+        }
+
+        btn.addEventListener('click', function () {
+            if (!play) {
+                play = true;
+                btn.innerHTML = "Guess";
+                guess.classList.toggle('hidden');
+                newWords = createNewWords();
+                ranWords = scrambleWords(newWords.split("")).join("");
+
+                msg.innerHTML = `Guess the word: ${ranWords}`;
+            } else {
+                let tempWord = guess.value;
+                if (tempWord === newWords) {
+                    // console.log('correct');
+                    play = false;
+                    msg.innerHTML = `Awesome! You are right... It's ${newWords} :)`;
+                    btn.innerHTML = "Start Again";
+                    guess.classList.toggle('hidden');
+                    guess.value = "";
+                } else {
+                    console.log('incorrect');
+                    msg.innerHTML = `Oh Sorry! It's Incorrect... Try it again: (${ranWords})`;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
